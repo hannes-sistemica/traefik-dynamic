@@ -1,9 +1,13 @@
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, Request, Form
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
 import os
 import uvicorn
+import json
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 # Basic Auth
 security = HTTPBasic()
@@ -34,6 +38,49 @@ def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
 def get_config():
     """Endpoint to serve the dynamic configuration to Traefik."""
     return config
+
+@app.get("/ui", response_class=HTMLResponse)
+def config_ui(request: Request, credentials: HTTPBasicCredentials = Depends(authenticate)):
+    """Serve the configuration editor UI."""
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "config": json.dumps(config, indent=2)
+        }
+    )
+
+@app.post("/ui/config", response_class=HTMLResponse)
+async def update_config_ui(
+    request: Request,
+    config: str = Form(...),
+    credentials: HTTPBasicCredentials = Depends(authenticate)
+):
+    """Handle configuration updates from the UI."""
+    try:
+        new_config = json.loads(config)
+        global config
+        config = new_config
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                "config": json.dumps(config, indent=2),
+                "message": "Configuration updated successfully!",
+                "success": True
+            }
+        )
+    except json.JSONDecodeError:
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                "config": config,
+                "message": "Invalid JSON format!",
+                "success": False
+            },
+            status_code=400
+        )
 
 @app.post("/upload")
 def upload_config(new_config: dict, credentials: HTTPBasicCredentials = Depends(authenticate)):
