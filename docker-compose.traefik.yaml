@@ -1,9 +1,8 @@
-version: '3.8'
-
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:v3.2
     container_name: traefik
+    platform: linux/amd64
     ports:
       - "8081:8080"  # Dashboard
       - "9080:80"    # HTTP
@@ -21,6 +20,7 @@ services:
   traefik-config:
     image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
     container_name: traefik-config-server
+    platform: linux/amd64
     restart: unless-stopped
     ports:
       - "5001:5000"
