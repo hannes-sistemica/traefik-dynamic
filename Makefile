@@ -12,7 +12,9 @@ start:
 		-e BASIC_AUTH_USERNAME=$(USERNAME) \
 		-e BASIC_AUTH_PASSWORD=$(PASSWORD) \
 		$(IMAGE_NAME)
-	@echo "$(CONTAINER_NAME) is running on port $(PORT)."
+	@echo "$(CONTAINER_NAME) is running."
+	@echo "API: http://localhost:$(PORT)/config"
+	@echo "UI: http://localhost:$(PORT)/ui"
 
 # Stop the container
 stop:
