@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   traefik-config:
-    image: ghcr.io/your-username/your-repo:latest
+    image: traefik-config-server:latest
+    build: .
     container_name: traefik-config-server
     restart: unless-stopped
     ports:

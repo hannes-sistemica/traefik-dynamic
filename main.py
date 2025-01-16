@@ -42,5 +42,10 @@ def upload_config(new_config: dict, credentials: HTTPBasicCredentials = Depends(
     config = new_config
     return {"message": "Configuration updated successfully"}
 
+@app.get("/health")
+def health_check():
+    """Health check endpoint for container monitoring."""
+    return {"status": "healthy"}
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=5000)

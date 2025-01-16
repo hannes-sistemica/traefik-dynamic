@@ -5,33 +5,31 @@ PORT = 5001
 USERNAME = admin
 PASSWORD = secret
 
-# Start the container
+# Start the containers
 start:
-	@echo "Starting $(CONTAINER_NAME)..."
-	docker run -d --name $(CONTAINER_NAME) -p $(PORT):5000 \
-		-e BASIC_AUTH_USERNAME=$(USERNAME) \
-		-e BASIC_AUTH_PASSWORD=$(PASSWORD) \
-		$(IMAGE_NAME)
-	@echo "$(CONTAINER_NAME) is running on port $(PORT)."
+	@echo "Starting services with docker-compose..."
+	docker-compose up -d
+	@echo "Services are running. Traefik dashboard available at http://localhost:8080"
 
-# Stop the container
+# Stop the containers
 stop:
-	@echo "Stopping $(CONTAINER_NAME)..."
-	docker stop $(CONTAINER_NAME) || true
-	docker rm $(CONTAINER_NAME) || true
-	@echo "$(CONTAINER_NAME) stopped and removed."
+	@echo "Stopping services..."
+	docker-compose down
+	@echo "Services stopped and removed."
 
 # Test upload and download functionality
 test:
 	@echo "Testing upload and download functionality..."
 	@echo "Fetching current configuration..."
-	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:$(PORT)/config | jq
+	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:5001/config | jq
 	@echo "Uploading configuration from traefik-config-example.yml..."
-	@curl -u $(USERNAME):$(PASSWORD) -X POST http://localhost:$(PORT)/upload \
+	@curl -u $(USERNAME):$(PASSWORD) -X POST http://localhost:5001/upload \
 		-H "Content-Type: application/json" \
 		-d @traefik-config-example.yml | jq
 	@echo "Fetching updated configuration..."
-	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:$(PORT)/config | jq
+	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:5001/config | jq
+	@echo "Testing health check..."
+	@curl -s http://localhost:5001/health | jq
 	@echo "Test complete."
 
 # Build the Docker image
