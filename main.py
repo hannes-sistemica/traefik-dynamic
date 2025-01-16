@@ -57,10 +57,24 @@ def config_ui(request: Request, credentials: HTTPBasicCredentials = Depends(auth
 @app.post("/ui/config", response_class=HTMLResponse)
 async def update_config_ui(
     request: Request,
-    config_data: str = Form(...),
     credentials: HTTPBasicCredentials = Depends(authenticate)
 ):
     """Handle configuration updates from the UI."""
+    form_data = await request.form()
+    config_data = form_data.get("config_data")
+    
+    if not config_data:
+        return templates.TemplateResponse(
+            "index.html",
+            {
+                "request": request,
+                "config": json.dumps(config, indent=2),
+                "message": "No configuration data provided!",
+                "success": False
+            },
+            status_code=400
+        )
+    
     try:
         new_config = json.loads(config_data)
         global config
@@ -79,7 +93,7 @@ async def update_config_ui(
             "index.html",
             {
                 "request": request,
-                "config": config,
+                "config": config_data,  # Return the raw input for debugging
                 "message": "Invalid JSON format!",
                 "success": False
             },
