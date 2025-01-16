@@ -71,7 +71,7 @@ run:
 	@uv venv
 	@. .venv/bin/activate && uv pip install -r requirements.txt
 	@echo "Starting server..."
-	@. .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 5000 --reload
+	@. .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 5001 --reload
 
 # Help message
 help:
