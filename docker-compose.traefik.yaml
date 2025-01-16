@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   traefik:
     image: traefik:v3.2
@@ -12,10 +14,15 @@ services:
     command:
       - --api.insecure=true
       - --providers.docker
-      - --providers.http.endpoint=http://traefik-config:5001/config
+      - --providers.http.endpoint=http://traefik-config:5000/config
       - --providers.http.pollInterval=10s
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
+    depends_on:
+      traefik-config:
+        condition: service_healthy
+    networks:
+      - traefik-net
 
   traefik-config:
     image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
@@ -27,4 +34,15 @@ services:
     environment:
       - BASIC_AUTH_USERNAME=admin
       - BASIC_AUTH_PASSWORD=secret
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+    driver: bridge
 
