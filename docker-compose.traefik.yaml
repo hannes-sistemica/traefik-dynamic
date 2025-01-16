@@ -19,8 +19,8 @@ services:
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
     depends_on:
-      traefik-config:
-        condition: service_healthy
+      - traefik-config
+       # condition: service_healthy
     networks:
       - traefik-net
 
@@ -31,19 +31,16 @@ services:
     restart: unless-stopped
     ports:
       - "5001:5000"
-    environment:
-      - BASIC_AUTH_USERNAME=admin
-      - BASIC_AUTH_PASSWORD=secret
-    healthcheck:
-      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:5000/health', timeout=3)"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 5s
+    env_file:
+      - .env
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+    #   interval: 30s
+    #   timeout: 3s
+    #   retries: 3
     networks:
       - traefik-net
 
 networks:
   traefik-net:
-    driver: bridge
 

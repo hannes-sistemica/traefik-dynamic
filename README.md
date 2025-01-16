@@ -118,7 +118,7 @@ curl -u admin:secret -X POST http://localhost:5001/upload \
           "loadBalancer": {
             "servers": [
               {
-                "url": "http://192.168.1.251:3000"
+                "url": "http://192.168.1.2:3000"
               }
             ]
           }
@@ -139,7 +139,7 @@ curl http://localhost:5001/config
 
 #### Docker Compose Example
 
-Here's how to configure Traefik with our config server in Docker Compose:
+Here's how to configure Traefik with our config server in Docker Compose (this is only an example, make sure to not expose username/passwords!):
 
 ```yaml
 version: '3.8'
@@ -157,7 +157,7 @@ services:
     command:
       - --api.insecure=true
       - --providers.docker
-      - --providers.http.endpoint=http://traefik-config:5001/config
+      - --providers.http.endpoint=http://traefik-config:5000/config
       - --providers.http.pollInterval=10s
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
@@ -186,7 +186,7 @@ api:
 # Providers configuration
 providers:
   http:
-    endpoint: "http://localhost:5001/config"
+    endpoint: "http://<config-server-ip>:<config-server-port>/config"
     pollInterval: "10s"
   
   file:
@@ -315,7 +315,7 @@ traefik-config-server/
             "loadBalancer": {
               "servers": [
                 {
-                  "url": "http://192.168.1.251:3000"
+                  "url": "http://192.168.1.2:3000"
                 }
               ]
             }
