@@ -73,17 +73,25 @@ run:
 	@echo "Starting server..."
 	@. .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 5001 --reload
 
+# Start local Traefik with config server
+start-traefik-local:
+	@echo "Starting local Traefik with config server..."
+	docker-compose -f docker-compose.traefik-local.yaml up -d
+	@echo "Traefik dashboard: http://localhost:8081"
+	@echo "Config server: http://localhost:5001/ui"
+
 # Help message
 help:
 	@echo "Available commands:"
-	@echo "  make start         - Start the container"
-	@echo "  make start-traefik - Start Traefik with config server"
-	@echo "  make stop          - Stop the container"
-	@echo "  make stop-traefik  - Stop Traefik compose and clean volumes"
-	@echo "  make test          - Test upload/download functionality"
-	@echo "  make build         - Build the Docker image"
-	@echo "  make clean         - Clean up Docker resources"
-	@echo "  make run           - Run locally with uv (development)"
-	@echo "  make help          - Show this help message"
+	@echo "  make start             - Start the container"
+	@echo "  make start-traefik     - Start Traefik with config server (production)"
+	@echo "  make start-traefik-local - Start Traefik with local config server build"
+	@echo "  make stop              - Stop the container"
+	@echo "  make stop-traefik      - Stop Traefik compose and clean volumes"
+	@echo "  make test              - Test upload/download functionality"
+	@echo "  make build             - Build the Docker image"
+	@echo "  make clean             - Clean up Docker resources"
+	@echo "  make run               - Run locally with uv (development)"
+	@echo "  make help              - Show this help message"
 
 .PHONY: start stop test build clean help
