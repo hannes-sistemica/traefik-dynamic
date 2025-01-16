@@ -68,6 +68,12 @@ docker run -d --name traefik-config-server -p 5001:5000 \
 
 ### **2. Using Docker Compose**
 
+First, set up your environment variables:
+
+```bash
+cp example.env .env
+```
+
 Create a `docker-compose.yml` file:
 
 ```yaml
