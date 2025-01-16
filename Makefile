@@ -5,17 +5,21 @@ PORT = 5001
 USERNAME = admin
 PASSWORD = secret
 
-# Start the containers
+# Start the container
 start:
-	@echo "Starting services with docker-compose..."
-	docker-compose up -d
-	@echo "Services are running. Traefik dashboard available at http://localhost:8080"
+	@echo "Starting $(CONTAINER_NAME)..."
+	docker run -d --name $(CONTAINER_NAME) -p $(PORT):5000 \
+		-e BASIC_AUTH_USERNAME=$(USERNAME) \
+		-e BASIC_AUTH_PASSWORD=$(PASSWORD) \
+		$(IMAGE_NAME)
+	@echo "$(CONTAINER_NAME) is running on port $(PORT)."
 
-# Stop the containers
+# Stop the container
 stop:
-	@echo "Stopping services..."
-	docker-compose down
-	@echo "Services stopped and removed."
+	@echo "Stopping $(CONTAINER_NAME)..."
+	docker stop $(CONTAINER_NAME) || true
+	docker rm $(CONTAINER_NAME) || true
+	@echo "$(CONTAINER_NAME) stopped and removed."
 
 # Test upload and download functionality
 test:
