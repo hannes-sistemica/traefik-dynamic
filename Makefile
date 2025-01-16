@@ -75,8 +75,8 @@ run:
 
 # Start local Traefik with config server
 start-traefik-local:
-	@echo "Starting local Traefik with config server..."
-	docker-compose -f docker-compose.traefik-local.yaml up -d
+	@echo "Building and starting local Traefik with config server..."
+	docker-compose -f docker-compose.traefik-local.yaml up -d --build
 	@echo "Traefik dashboard: http://localhost:8081"
 	@echo "Config server: http://localhost:5001/ui"
 
