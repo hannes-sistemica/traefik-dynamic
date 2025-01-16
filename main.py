@@ -60,6 +60,7 @@ async def update_config_ui(
     credentials: HTTPBasicCredentials = Depends(authenticate)
 ):
     """Handle configuration updates from the UI."""
+    global config
     form_data = await request.form()
     config_data = form_data.get("config_data")
     
@@ -77,7 +78,6 @@ async def update_config_ui(
     
     try:
         new_config = json.loads(config_data)
-        global config
         config = new_config
         return templates.TemplateResponse(
             "index.html",
