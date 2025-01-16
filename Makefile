@@ -26,10 +26,10 @@ test:
 	@echo "Testing upload and download functionality..."
 	@echo "Fetching current configuration..."
 	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:$(PORT)/config | jq
-	@echo "Uploading new configuration..."
+	@echo "Uploading configuration from traefik-config-example.yml..."
 	@curl -u $(USERNAME):$(PASSWORD) -X POST http://localhost:$(PORT)/upload \
 		-H "Content-Type: application/json" \
-		-d '{"http": {"services": {"gitea": {"loadBalancer": {"servers": [{"url": "http://192.168.1.251:3000"}]}}}}}' | jq
+		-d @traefik-config-example.yml | jq
 	@echo "Fetching updated configuration..."
 	@curl -u $(USERNAME):$(PASSWORD) -s http://localhost:$(PORT)/config | jq
 	@echo "Test complete."
