@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    platform: linux/amd64
+    ports:
+      - "8081:8080"  # Dashboard
+      - "9080:80"    # HTTP
+      - "9443:443"   # HTTPS
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.http.endpoint=http://traefik-config:5000/config
+      - --providers.http.pollInterval=10s
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+    depends_on:
+      - traefik-config
+       # condition: service_healthy
+    networks:
+      - traefik-net
+
+  traefik-config:
+    image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
+    container_name: traefik-config-server
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    env_file:
+      - .env
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+    #   interval: 30s
+    #   timeout: 3s
+    #   retries: 3
+    networks:
+      - traefik-net
+
+networks:
+  traefik-net:
+
