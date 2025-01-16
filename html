@@ -65,7 +65,7 @@
         </div>
         {% endif %}
 
-        <form method="post" action="/ui/config">
+        <form method="post" action="/ui/config" enctype="multipart/form-data">
             <textarea name="config_data" id="config">{{ config }}</textarea>
             <div class="button-group">
                 <button type="submit" class="primary">Save Configuration</button>
