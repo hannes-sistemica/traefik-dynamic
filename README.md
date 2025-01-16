@@ -376,6 +376,40 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ---
 
+## **Troubleshooting**
+
+### Docker Swarm DNS Resolution
+
+When using Docker Swarm, you might encounter issues where Traefik cannot resolve the `traefik-config` service name. This is because Docker Swarm uses a different DNS resolution pattern.
+
+If Traefik cannot reach `http://traefik-config:5000/config`, try these solutions:
+
+1. **Use the tasks prefix**:
+   ```yaml
+   services:
+     traefik:
+       command:
+         - --providers.http.endpoint=http://tasks.traefik-config:5000/config
+   ```
+
+2. **Use the stack name prefix** (if using a stack):
+   ```yaml
+   services:
+     traefik:
+       command:
+         - --providers.http.endpoint=http://traefik-config.yourstack:5000/config
+   ```
+
+3. **Verify DNS resolution**:
+   ```bash
+   docker exec -it traefik nslookup traefik-config
+   docker exec -it traefik nslookup tasks.traefik-config
+   ```
+
+4. **Check network configuration**:
+   - Ensure both services are in the same Docker network
+   - Verify network connectivity between containers
+
 ## **Acknowledgments**
 
 - [Traefik](https://traefik.io/) for being an awesome reverse proxy.
