@@ -142,7 +142,39 @@ providers:
 
 ---
 
-### **5. Use Makefile (Optional)**
+### **5. Traefik Polling and Change Detection**
+
+Traefik periodically polls the HTTP provider endpoint to detect configuration changes. Here's how it works:
+
+1. **Polling Mechanism**:
+   - Traefik polls the `/config` endpoint at a configurable interval
+   - Default polling interval is 30 seconds
+   - Configure with `pollInterval` in Traefik's configuration:
+     ```yaml
+     providers:
+       http:
+         endpoint: "http://traefik-config-server:5001/config"
+         pollInterval: "10s"  # Poll every 10 seconds
+     ```
+
+2. **Change Detection**:
+   - Traefik compares the new configuration with the current one
+   - Changes are applied immediately without restart
+   - Invalid configurations are rejected
+
+3. **Example Workflow**:
+   - Upload new configuration via `/upload` endpoint
+   - Traefik detects changes on next poll
+   - New configuration takes effect immediately
+
+4. **Monitoring**:
+   - Check Traefik logs for change detection:
+     ```
+     time="2023-10-10T12:00:00Z" level=info msg="Configuration received from provider: http"
+     time="2023-10-10T12:00:00Z" level=info msg="Applying changes for provider: http"
+     ```
+
+### **6. Use Makefile (Optional)**
 
 The project includes a `Makefile` for easier management. Here are the available commands:
 
