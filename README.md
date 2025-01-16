@@ -132,12 +132,74 @@ curl http://localhost:5001/config
 
 ### **4. Integrate with Traefik**
 
-Update your Traefik configuration to use the `traefik-config-server` as an HTTP provider:
+#### Docker Compose Example
+
+Here's how to configure Traefik with our config server in Docker Compose:
 
 ```yaml
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v3.2
+    container_name: traefik
+    ports:
+      - "8081:8080"  # Dashboard
+      - "9080:80"    # HTTP
+      - "9443:443"   # HTTPS
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.http.endpoint=http://traefik-config:5001/config
+      - --providers.http.pollInterval=10s
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+
+  traefik-config:
+    image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
+    container_name: traefik-config-server
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      - BASIC_AUTH_USERNAME=admin
+      - BASIC_AUTH_PASSWORD=secret
+```
+
+#### Standalone Traefik Configuration
+
+For a non-Docker setup, add this to your Traefik configuration file:
+
+```yaml
+# Enable API and dashboard
+api:
+  insecure: true
+  dashboard: true
+
+# Providers configuration
 providers:
   http:
-    endpoint: "http://traefik-config-server:5001/config"
+    endpoint: "http://localhost:5001/config"
+    pollInterval: "10s"
+  
+  file:
+    filename: "/etc/traefik/traefik.yml"
+    watch: true
+
+# Entry points
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+```
+
+Then start Traefik with:
+
+```bash
+traefik --configFile=/etc/traefik/traefik.yml
 ```
 
 ---
