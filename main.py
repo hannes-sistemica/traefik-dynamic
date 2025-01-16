@@ -53,12 +53,12 @@ def config_ui(request: Request, credentials: HTTPBasicCredentials = Depends(auth
 @app.post("/ui/config", response_class=HTMLResponse)
 async def update_config_ui(
     request: Request,
-    config: str = Form(...),
+    config_data: str = Form(...),
     credentials: HTTPBasicCredentials = Depends(authenticate)
 ):
     """Handle configuration updates from the UI."""
     try:
-        new_config = json.loads(config)
+        new_config = json.loads(config_data)
         global config
         config = new_config
         return templates.TemplateResponse(
