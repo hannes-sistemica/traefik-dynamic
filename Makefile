@@ -50,14 +50,22 @@ clean:
 	@docker rmi $(IMAGE_NAME) || true
 	@echo "Project-specific Docker resources cleaned."
 
+# Start Traefik with config server
+start-traefik:
+	@echo "Starting Traefik with config server..."
+	docker-compose -f docker-compose.traefik.yaml up -d
+	@echo "Traefik dashboard: http://traefik.localhost:8081"
+	@echo "Config server: http://config.localhost:9080"
+
 # Help message
 help:
 	@echo "Available commands:"
-	@echo "  make start    - Start the container"
-	@echo "  make stop     - Stop the container"
-	@echo "  make test     - Test upload/download functionality"
-	@echo "  make build    - Build the Docker image"
-	@echo "  make clean    - Clean up Docker resources"
-	@echo "  make help     - Show this help message"
+	@echo "  make start         - Start the container"
+	@echo "  make start-traefik - Start Traefik with config server"
+	@echo "  make stop          - Stop the container"
+	@echo "  make test          - Test upload/download functionality"
+	@echo "  make build         - Build the Docker image"
+	@echo "  make clean         - Clean up Docker resources"
+	@echo "  make help          - Show this help message"
 
 .PHONY: start stop test build clean help
