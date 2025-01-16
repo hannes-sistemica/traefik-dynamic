@@ -11,27 +11,8 @@ services:
     environment:
       - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME}
       - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
-    volumes:
-      - ./traefik-config-example.yml:/app/traefik-config-example.yml
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 30s
       timeout: 3s
       retries: 3
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.traefik-config.rule=Host(`config.local`)"
-      - "traefik.http.services.traefik-config.loadbalancer.server.port=5000"
-
-  traefik:
-    image: traefik:v2.10
-    container_name: traefik
-    command:
-      - --api.insecure=true
-      - --providers.docker
-      - --entrypoints.web.address=:80
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
