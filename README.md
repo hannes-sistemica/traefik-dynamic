@@ -99,7 +99,7 @@ The server will be available at `http://localhost:5001`.
 
 #### Fetch Current Configuration
 ```bash
-curl -u admin:secret http://localhost:5001/config
+curl http://localhost:5001/config
 ```
 
 #### Upload New Configuration
@@ -125,7 +125,7 @@ curl -u admin:secret -X POST http://localhost:5001/upload \
 
 #### Verify Updated Configuration
 ```bash
-curl -u admin:secret http://localhost:5001/config
+curl http://localhost:5001/config
 ```
 
 ---
