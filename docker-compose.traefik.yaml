@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    ports:
+      - "8081:8080"  # Dashboard
+      - "9080:80"    # HTTP
+      - "9443:443"   # HTTPS
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - --api.insecure=true
+      - --providers.docker
+      - --providers.http.endpoint=http://traefik-config:5001/config
+      - --providers.http.pollInterval=10s
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+
+  traefik-config:
+    image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
+    container_name: traefik-config-server
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      - BASIC_AUTH_USERNAME=admin
+      - BASIC_AUTH_PASSWORD=secret
+
