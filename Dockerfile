@@ -28,7 +28,7 @@ HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:5000/health || exit 1
 
 # Add container metadata
-LABEL org.opencontainers.image.source="https://github.com/${{ github.repository }}"
+LABEL org.opencontainers.image.source="https://github.com/hannes-sistemica/traefik-dynamic"
 LABEL org.opencontainers.image.description="Traefik Config Server"
 LABEL org.opencontainers.image.licenses="MIT"
 
