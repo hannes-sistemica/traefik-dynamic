@@ -68,7 +68,8 @@ async def update_config_ui(
     form_data = await request.form()
     print("Form data received:", form_data)
     
-    config_data = form_data.get("config_data")
+    # Try both field names for backward compatibility
+    config_data = form_data.get("config_data") or form_data.get("config")
     print("Config data received:", config_data)
     
     if not config_data:
