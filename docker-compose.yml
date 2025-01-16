@@ -2,15 +2,14 @@ version: '3.8'
 
 services:
   traefik-config:
-    image: traefik-config-server:latest
-    build: .
+    image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
     container_name: traefik-config-server
     restart: unless-stopped
     ports:
       - "5001:5000"
     environment:
-      - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME}
-      - BASIC_AUTH_PASSWORD=${BASIC_AUTH_PASSWORD}
+      - BASIC_AUTH_USERNAME=admin
+      - BASIC_AUTH_PASSWORD=secret
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 30s

@@ -1,5 +1,5 @@
 # Variables
-IMAGE_NAME = traefik-config-server
+IMAGE_NAME = ghcr.io/hannes-sistemica/traefik-dynamic
 CONTAINER_NAME = traefik-config-server
 PORT = 5001
 USERNAME = admin

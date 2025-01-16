@@ -53,32 +53,42 @@ To solve these issues, we created the `traefik-config-server`, which provides a 
 
 ---
 
-### **1. Build the Docker Image**
+### **1. Run the Container**
 
-Clone the repository and navigate to the project directory:
-
-```bash
-git clone https://github.com/your-username/traefik-config-server.git
-cd traefik-config-server
-```
-
-Build the Docker image:
+Start the container using the pre-built image from GitHub Container Registry:
 
 ```bash
-docker build -t traefik-config-server .
+docker run -d --name traefik-config-server -p 5001:5000 \
+  -e BASIC_AUTH_USERNAME=admin \
+  -e BASIC_AUTH_PASSWORD=secret \
+  ghcr.io/hannes-sistemica/traefik-dynamic:latest
 ```
 
 ---
 
-### **2. Run the Container**
+### **2. Using Docker Compose**
 
-Start the container:
+Create a `docker-compose.yml` file:
+
+```yaml
+version: '3.8'
+
+services:
+  traefik-config:
+    image: ghcr.io/hannes-sistemica/traefik-dynamic:latest
+    container_name: traefik-config-server
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      - BASIC_AUTH_USERNAME=admin
+      - BASIC_AUTH_PASSWORD=secret
+```
+
+Then start the service:
 
 ```bash
-docker run -d --name traefik-config-server -p 5001:5001 \
-  -e BASIC_AUTH_USERNAME=admin \
-  -e BASIC_AUTH_PASSWORD=secret \
-  traefik-config-server
+docker-compose up -d
 ```
 
 The server will be available at `http://localhost:5001`.
