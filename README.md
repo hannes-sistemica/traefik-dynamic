@@ -97,7 +97,7 @@ Then start the service:
 docker-compose up -d
 ```
 
-The server will be available at `http://localhost:5001`.
+The server will be available at `http://<your-host>:<port>`.
 
 ---
 
@@ -105,7 +105,7 @@ The server will be available at `http://localhost:5001`.
 
 The configuration server includes a web-based UI for easy configuration management:
 
-1. Access the UI at `http://localhost:5001/ui`
+1. Access the UI at `http://<your-host>:<port>/ui`
 2. Use the Basic Auth credentials (default: admin/secret)
 3. Edit the JSON configuration in the text area
 4. Click "Save Configuration" to apply changes
@@ -120,12 +120,12 @@ The UI provides:
 
 #### Fetch Current Configuration
 ```bash
-curl http://localhost:5001/config
+curl http://<your-host>:<port>/config
 ```
 
 #### Upload New Configuration
 ```bash
-curl -u admin:secret -X POST http://localhost:5001/upload \
+curl -u admin:secret -X POST http://<your-host>:<port>/upload \
   -H "Content-Type: application/json" \
   -d '{
     "http": {
@@ -146,7 +146,7 @@ curl -u admin:secret -X POST http://localhost:5001/upload \
 
 #### Verify Updated Configuration
 ```bash
-curl http://localhost:5001/config
+curl http://<your-host>:<port>/config
 ```
 
 ---
@@ -292,12 +292,23 @@ The project includes a `Makefile` for easier management. Here are the available 
 
 ```
 traefik-config-server/
+├── .dockerignore
+├── .env.example
+├── .github/
+│   └── workflows/
+│       └── docker-publish.yml
 ├── .gitignore
-├── README.md
 ├── Dockerfile
+├── Makefile
+├── README.md
+├── docker-compose.traefik-local.yaml
+├── docker-compose.traefik.yaml
+├── docker-compose.yml
 ├── main.py
 ├── requirements.txt
-└── Makefile
+├── templates/
+│   └── index.html
+└── traefik-config-example.yml
 ```
 
 - **`.gitignore`**: Specifies files and directories to ignore in Git.
