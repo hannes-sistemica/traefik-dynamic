@@ -61,10 +61,18 @@ async def update_config_ui(
 ):
     """Handle configuration updates from the UI."""
     global config
+    
+    # Log incoming request headers
+    print("Incoming request headers:", request.headers)
+    
     form_data = await request.form()
+    print("Form data received:", form_data)
+    
     config_data = form_data.get("config_data")
+    print("Config data received:", config_data)
     
     if not config_data:
+        print("No config_data found in form submission")
         return templates.TemplateResponse(
             "index.html",
             {
