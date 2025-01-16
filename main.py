@@ -2,9 +2,13 @@ from fastapi import FastAPI, HTTPException, Depends, status, Request, Form
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from dotenv import load_dotenv
 import os
 import uvicorn
 import json
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -23,8 +27,8 @@ config = {
 
 # Basic Auth dependency
 def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
-    username = os.getenv("BASIC_AUTH_USERNAME")
-    password = os.getenv("BASIC_AUTH_PASSWORD")
+    username = os.environ["BASIC_AUTH_USERNAME"]
+    password = os.environ["BASIC_AUTH_PASSWORD"]
 
     if credentials.username != username or credentials.password != password:
         raise HTTPException(
@@ -95,4 +99,6 @@ def health_check():
     return {"status": "healthy"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    host = os.getenv("HOST", "0.0.0.0")
+    port = int(os.getenv("PORT", "5000"))
+    uvicorn.run(app, host=host, port=port)
