@@ -65,6 +65,12 @@ stop-traefik:
 	docker-compose -f docker-compose.traefik.yaml down -v
 	@echo "Traefik compose setup stopped and volumes removed."
 
+# Run locally with uv
+run:
+	@echo "Installing dependencies and starting server with uv..."
+	@uv pip install -r requirements.txt
+	@uvicorn main:app --host 0.0.0.0 --port 5000 --reload
+
 # Help message
 help:
 	@echo "Available commands:"
@@ -75,6 +81,7 @@ help:
 	@echo "  make test          - Test upload/download functionality"
 	@echo "  make build         - Build the Docker image"
 	@echo "  make clean         - Clean up Docker resources"
+	@echo "  make run           - Run locally with uv (development)"
 	@echo "  make help          - Show this help message"
 
 .PHONY: start stop test build clean help
