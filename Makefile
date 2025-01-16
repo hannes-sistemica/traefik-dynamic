@@ -57,12 +57,19 @@ start-traefik:
 	@echo "Traefik dashboard: http://traefik.localhost:8081"
 	@echo "Config server: http://config.localhost:9080"
 
+# Stop and clean Traefik compose setup
+stop-traefik:
+	@echo "Stopping and cleaning Traefik compose setup..."
+	docker-compose -f docker-compose.traefik.yaml down -v
+	@echo "Traefik compose setup stopped and volumes removed."
+
 # Help message
 help:
 	@echo "Available commands:"
 	@echo "  make start         - Start the container"
 	@echo "  make start-traefik - Start Traefik with config server"
 	@echo "  make stop          - Stop the container"
+	@echo "  make stop-traefik  - Stop Traefik compose and clean volumes"
 	@echo "  make test          - Test upload/download functionality"
 	@echo "  make build         - Build the Docker image"
 	@echo "  make clean         - Clean up Docker resources"
