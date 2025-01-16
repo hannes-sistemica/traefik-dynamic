@@ -80,9 +80,8 @@ services:
     restart: unless-stopped
     ports:
       - "5001:5000"
-    environment:
-      - BASIC_AUTH_USERNAME=admin
-      - BASIC_AUTH_PASSWORD=secret
+    env_file:
+      - .env
 ```
 
 Then start the service:
