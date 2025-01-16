@@ -39,6 +39,7 @@ To solve these issues, we created the `traefik-config-server`, which provides a 
 ## **Features**
 
 - **Dynamic Configuration**: Update Traefik's configuration in real-time via HTTP.
+- **Web UI**: User-friendly interface for editing and managing configurations.
 - **Basic Authentication**: Protect the API with username/password.
 - **Lightweight**: Built with Python and FastAPI, designed to run in a Docker container.
 - **Easy Integration**: Works seamlessly with Traefik's HTTP provider.
@@ -100,7 +101,22 @@ The server will be available at `http://localhost:5001`.
 
 ---
 
-### **3. Test the API**
+### **3. Use the Web UI**
+
+The configuration server includes a web-based UI for easy configuration management:
+
+1. Access the UI at `http://localhost:5001/ui`
+2. Use the Basic Auth credentials (default: admin/secret)
+3. Edit the JSON configuration in the text area
+4. Click "Save Configuration" to apply changes
+
+The UI provides:
+- Real-time configuration editing
+- Syntax highlighting for JSON
+- Immediate feedback on save success/failure
+- Error messages for invalid JSON
+
+### **4. Test the API**
 
 #### Fetch Current Configuration
 ```bash
