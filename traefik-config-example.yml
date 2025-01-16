@@ -1,0 +1,23 @@
+{
+  "http": {
+    "services": {
+      "gitea": {
+        "loadBalancer": {
+          "servers": [
+            {
+              "url": "http://192.168.1.251:3000"
+            }
+          ]
+        }
+      }
+    },
+    "routers": {
+      "gitea-router": {
+        "rule": "Host(`gitea.zuhause`)",
+        "service": "gitea",
+        "entryPoints": ["websecure"],
+        "tls": true
+      }
+    }
+  }
+}
