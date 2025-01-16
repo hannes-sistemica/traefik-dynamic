@@ -35,10 +35,11 @@ services:
       - BASIC_AUTH_USERNAME=admin
       - BASIC_AUTH_PASSWORD=secret
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD", "python3", "-c", "import requests; requests.get('http://localhost:5000/health', timeout=3)"]
       interval: 10s
       timeout: 3s
       retries: 3
+      start_period: 5s
     networks:
       - traefik-net
 
