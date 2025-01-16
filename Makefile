@@ -68,6 +68,7 @@ stop-traefik:
 # Run locally with uv
 run:
 	@echo "Installing dependencies and starting server with uv..."
+	@uv venv
 	@uv pip install -r requirements.txt
 	@uvicorn main:app --host 0.0.0.0 --port 5000 --reload
 
