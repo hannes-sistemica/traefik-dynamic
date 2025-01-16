@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+.aider*
+
+# Environment files
+.env
+example.env
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose*
+.dockerignore
+
+# Local development
+*.local
+*.dev
+
+# Documentation
+README.md
+LICENSE
