@@ -19,12 +19,17 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# Create non-root user
-RUN useradd -m appuser && chown -R appuser /app
+# Create non-root user and config directory
+RUN useradd -m appuser && \
+    mkdir -p /data && \
+    chown -R appuser /app /data
 USER appuser
 
 # Copy application code
 COPY --chown=appuser . .
+
+# Create volume for config storage
+VOLUME /data
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s \

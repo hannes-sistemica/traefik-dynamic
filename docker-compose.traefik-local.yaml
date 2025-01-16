@@ -36,5 +36,11 @@ services:
     networks:
       - traefik-net
 
+    volumes:
+      - traefik_config_data:/data
+
 networks:
   traefik-net:
+
+volumes:
+  traefik_config_data:

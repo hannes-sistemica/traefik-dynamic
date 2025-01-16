@@ -16,14 +16,31 @@ templates = Jinja2Templates(directory="templates")
 # Basic Auth
 security = HTTPBasic()
 
-# In-memory configuration
-config = {
-    "http": {
-        "services": {},
-        "routers": {},
-        "middlewares": {}
+import os
+from pathlib import Path
+
+CONFIG_FILE = "/data/config.json"
+
+# Load initial configuration
+def load_config():
+    config_path = Path(CONFIG_FILE)
+    if config_path.exists():
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    return {
+        "http": {
+            "services": {},
+            "routers": {},
+            "middlewares": {}
+        }
     }
-}
+
+def save_config(config):
+    with open(CONFIG_FILE, 'w') as f:
+        json.dump(config, f, indent=2)
+
+# Initialize config
+config = load_config()
 
 # Basic Auth dependency
 def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
@@ -87,6 +104,7 @@ async def update_config_ui(
     
     try:
         new_config = json.loads(config_data)
+        save_config(new_config)
         config = new_config
         return templates.TemplateResponse(
             "index.html",
